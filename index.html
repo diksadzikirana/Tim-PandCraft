@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kelola Produk</title>
+    <link rel="stylesheet" href="kelola_produk.css">
+</head>
+<body>
+
+
+    <h3>Kelola Data Produk Kerajinan Daun Pandan</h3>
+ <div class="top-bar">
+        <a href="dashboardpemilik.html" class="btn-kembali">← Kembali</a>
+    </div>
+    <hr>
+
+
+    <h2>Tambah / Edit Produk</h2>
+
+
+    <form id="formProduk" novalidate>
+
+
+        <input type="hidden" id="id_produk">
+<label>Nama Produk:</label><br>
+<select id="nama_produk">
+    <option value="">Pilih Produk</option>
+    <option value="Tas Anyam Pandan">Tas Anyam Pandan</option>
+    <option value="Keranjang Anyam Pandan">Keranjang Anyam Pandan</option>
+    <option value="Dompet Anyam Pandan">Dompet Anyam Pandan</option>
+    <option value="Tikar Anyam Pandan">Tikar Anyam Pandan</option>
+</select><br><br>
+
+
+        <label>Kategori:</label><br>
+        <select id="kategori" required>
+            <option value="">Pilih Kategori</option>
+            <option value="Tas">Tas</option>
+            <option value="Keranjang">Keranjang</option>
+            <option value="Dompet">Dompet</option>
+            <option value="Tikar">Tikar</option>
+        </select><br><br>
+
+
+        <label>Harga (Rp):</label><br>
+        <input type="number" id="harga" min="0" required><br><br>
+
+
+        <label>Stok:</label><br>
+        <input type="number" id="stok" min="0" required><br><br>
+
+
+        <label>Status Produk:</label><br>
+        <textarea id="status_produk" required></textarea><br><br>
+
+
+        <button type="submit">Simpan Produk</button>
+        <button type="reset">Reset</button>
+
+
+    </form>
+
+
+    <hr>
+
+
+    <h2>Daftar Produk</h2>
+
+
+    <table border="1" width="100%" id="tabelProduk">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Status Produk</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data produk -->
+        </tbody>
+    </table>
+<body>
+
+
+   
+<script src="kelola_produk.js"></script>
+</body>
