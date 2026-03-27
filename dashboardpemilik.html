@@ -4,38 +4,38 @@
     <meta charset="UTF-8">
     <title>Dashboard Pemilik</title>
     <link rel="stylesheet" href="dashboardpemilik.css">
+    <script src="function/validatetoken.js"></script>
 </head>
 <body>
 
-
-    <!-- Judul di tengah -->
     <h1 class="title">Dashboard Pemilik</h1>
 
-
-    <!-- Tombol kembali di kanan atas -->
     <a href="logpemilik.html" class="btn-back">← Kembali</a>
-
 
     <p>Silahkan Pilih Menu Untuk Mengelola Produk Anda</p>
 
-
     <hr>
-
 
     <h2>Menu Utama</h2>
 
-
     <div class="menu">
-
-
         <a href="kelola_produk.html"><button>Kelola Produk</button></a>
         <a href="kelola_pesanan.html"><button>Kelola Pesanan</button></a>
         <a href="kelola_pembayaran.html"><button>Kelola Pembayaran</button></a>
         <a href="riwayat_penjualan.html"><button>Riwayat Penjualan</button></a>
-
-
     </div>
 
+    <!-- VALIDASI TOKEN -->
+    <script>
+    const session = getValidSession();
+
+    if (!session) {
+        alert("Session habis / belum login!");
+        window.location.href = "logpemilik.html";
+    } else {
+        console.log("Login sebagai:", session.data.user);
+    }
+</script>
 
 </body>
 </html>
