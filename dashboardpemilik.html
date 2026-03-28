@@ -10,7 +10,7 @@
 
     <h1 class="title">Dashboard Pemilik</h1>
 
-    <a href="logpemilik.html" class="btn-back">← Kembali</a>
+    <button onclick="logout()" class="btn-back">Logout</button>
 
     <p>Silahkan Pilih Menu Untuk Mengelola Produk Anda</p>
 
@@ -36,6 +36,16 @@
         console.log("Login sebagai:", session.data.user);
     }
 </script>
+    <script>
+function logout() {
+    // Hapus token dari localStorage
+    localStorage.removeItem("token");
 
+    alert("Logout berhasil!");
+
+    // Arahkan ke halaman login
+    window.location.href = "logpemilik.html";
+}
+</script>
 </body>
 </html>
