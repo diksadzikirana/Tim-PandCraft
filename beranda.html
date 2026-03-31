@@ -1,28 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website PandCraft</title>
-    <link rel="stylesheet" href="beranda.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website PandCraft</title>
+
+  <!-- Tailwind menggunakan CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="navbar">
-  <div class="logo">Website PandCraft </div>
-  </nav>
-</header>
-    <h2 style="color: white; font-size: 40px; text-shadow: 0 0 5px #ffff;">Selamat Datang</h2>
-    <div class="login-container">
-    <h2>Login Sebagai</h2>
 
+<body class="m-0 min-h-screen flex flex-col items-center gap-[25px] font-sans 
+bg-[linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url('anyam.png')] 
+bg-cover bg-center bg-no-repeat">
 
-    <button onclick="window.location.href='logpemilik.html'">
-    Pemilik
-   </button>
-    <button onclick="window.location.href='logpembeli.html'">
-    Pembeli
-   <button onclick="window.location.href='logadmin.html'">
-    Admin
+  <!-- Navbar -->
+  <header class="w-full bg-[#1e1e1e] flex justify-between items-center px-[30px] py-[20px] border-b-[3px] border-[#2e7d32]">
+    <div class="text-[#2e7d32] text-[24px] font-bold">Website PandCraft</div>
+  </header>
+
+  <!-- Judul -->
+  <h2 class="text-white text-[40px] [text-shadow:0_0_5px_#ffff]">
+    Selamat Datang
+  </h2>
+
+  <!-- Login Box -->
+  <div class="bg-white p-[30px] w-[320px] rounded-[12px] text-center shadow-[0_6px_15px_rgba(0,0,0,0.15)] mb-auto">
+    <h2 class="mb-[20px] text-[#333] text-xl font-semibold">Login Sebagai</h2>
+
+    <button onclick="window.location.href='logpemilik.html'"
+      class="w-full my-[10px] p-[12px] border-none rounded-[8px] bg-[#4caf50] text-white text-[16px] cursor-pointer transition duration-300 hover:bg-[#43a047]">
+      Pemilik
+    </button>
+
+    <button onclick="window.location.href='logpembeli.html'"
+      class="w-full my-[10px] p-[12px] border-none rounded-[8px] bg-[#4caf50] text-white text-[16px] cursor-pointer transition duration-300 hover:bg-[#43a047]">
+      Pembeli
+    </button>
+
+    <button onclick="window.location.href='logadmin.html'"
+      class="w-full my-[10px] p-[12px] border-none rounded-[8px] bg-[#4caf50] text-white text-[16px] cursor-pointer transition duration-300 hover:bg-[#43a047]">
+      Admin
+    </button>
   </div>
+
 </body>
 </html>

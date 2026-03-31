@@ -3,49 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Pemilik</title>
-    <link rel="stylesheet" href="dashboardpemilik.css">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <script src="function/validatetoken.js"></script>
 </head>
-<body>
 
-    <h1 class="title">Dashboard Pemilik</h1>
+<body class="font-['Segoe_UI'] min-h-screen 
+bg-[linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url('anyam.png')] 
+bg-cover bg-center">
 
-    <button onclick="logout()" class="btn-back">Logout</button>
+<!-- Tombol Logout -->
+<button onclick="logout()" 
+class="absolute top-[20px] right-[20px] px-[15px] py-[10px] bg-[#333] text-white rounded-[5px] text-[14px] hover:bg-[#555]">
+    Logout
+</button>
 
-    <p>Silahkan Pilih Menu Untuk Mengelola Produk Anda</p>
+<!-- Container Tengah -->
+<div class="flex flex-col justify-center items-center min-h-screen text-center text-white">
 
-    <hr>
+    <!-- Judul -->
+    <h1 class="text-[50px] font-bold text-white mb-[15px] 
+    [text-shadow:3px_3px_10px_rgba(0,0,0,0.9)] mt-[20px]">
+        Dashboard Pemilik
+    </h1>
 
-    <h2>Menu Utama</h2>
+    <!-- Deskripsi -->
+    <p class="text-[20px] mb-[30px] text-[#e8f5e9] 
+    [text-shadow:1px_1px_6px_rgba(0,0,0,0.8)]">
+        Silahkan Pilih Menu Untuk Mengelola Produk Anda
+    </p>
 
-    <div class="menu">
-        <a href="kelola_produk.html"><button>Kelola Produk</button></a>
-        <a href="kelola_pesanan.html"><button>Kelola Pesanan</button></a>
-        <a href="kelola_pembayaran.html"><button>Kelola Pembayaran</button></a>
-        <a href="riwayat_penjualan.html"><button>Riwayat Penjualan</button></a>
+    <!-- Garis -->
+    <hr class="w-[60%] my-[20px] border border-[rgba(255,255,255,0.3)]">
+
+    <!-- Sub Judul -->
+    <h2 class="text-[28px] text-white mb-[25px] 
+    [text-shadow:2px_2px_8px_rgba(0,0,0,0.9)]">
+        Menu Utama
+    </h2>
+
+    <!-- Menu -->
+    <div class="bg-[rgba(255,255,255,0.15)] backdrop-blur-[10px] p-[40px] rounded-[20px] 
+    w-[450px] grid grid-cols-2 gap-[20px] 
+    shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+
+        <a href="kelola_produk.html"
+        class="no-underline p-[15px] rounded-[12px] bg-[#2e7d32] text-white font-bold transition duration-300 hover:bg-[#1b5e20] hover:scale-105">
+            Kelola Produk
+        </a>
+
+        <a href="kelola_pesanan.html"
+        class="no-underline p-[15px] rounded-[12px] bg-[#2e7d32] text-white font-bold transition duration-300 hover:bg-[#1b5e20] hover:scale-105">
+            Kelola Pesanan
+        </a>
+
+        <a href="kelola_pembayaran.html"
+        class="no-underline p-[15px] rounded-[12px] bg-[#2e7d32] text-white font-bold transition duration-300 hover:bg-[#1b5e20] hover:scale-105">
+            Kelola Pembayaran
+        </a>
+
+        <a href="riwayat_penjualan.html"
+        class="no-underline p-[15px] rounded-[12px] bg-[#2e7d32] text-white font-bold transition duration-300 hover:bg-[#1b5e20] hover:scale-105">
+            Riwayat Penjualan
+        </a>
+
     </div>
 
-    <!-- VALIDASI TOKEN -->
-    <script>
-    const session = getValidSession();
+</div>
 
-    if (!session) {
-        alert("Session habis / belum login!");
-        window.location.href = "logpemilik.html";
-    } else {
-        console.log("Login sebagai:", session.data.user);
-    }
+<!-- VALIDASI TOKEN -->
+<script>
+const session = getValidSession();
+
+if (!session) {
+    alert("Session habis / belum login!");
+    window.location.href = "logpemilik.html";
+} else {
+    console.log("Login sebagai:", session.data.user);
+}
 </script>
-    <script>
+
+<script>
 function logout() {
-    // Hapus token dari localStorage
     localStorage.removeItem("token");
-
     alert("Logout berhasil!");
-
-    // Arahkan ke halaman login
     window.location.href = "logpemilik.html";
 }
 </script>
+
 </body>
 </html>
