@@ -17,17 +17,35 @@ if(isset($_POST['simpan'])){
     $stok = $_POST['stok'];
     $status = $_POST['status_produk'];
 
+    // upload gambar
+    $namaFile = $_FILES['gambar']['name'];
+    $tmpFile = $_FILES['gambar']['tmp_name'];
+
+    if($namaFile != ""){
+        move_uploaded_file($tmpFile, "gambar_produk/".$namaFile);
+    }
+
     if($id == ""){
         mysqli_query($conn,"INSERT INTO tb_produk 
-        (nama_produk,harga,stok,status_produk)
-        VALUES('$nama','$harga','$stok','$status')");
+        (nama_produk,harga,stok,status_produk,gambar)
+        VALUES('$nama','$harga','$stok','$status','$namaFile')");
     } else {
-        mysqli_query($conn,"UPDATE tb_produk SET
-        nama_produk='$nama',
-        harga='$harga',
-        stok='$stok',
-        status_produk='$status'
-        WHERE id_produk='$id'");
+        if($namaFile != ""){
+            mysqli_query($conn,"UPDATE tb_produk SET
+            nama_produk='$nama',
+            harga='$harga',
+            stok='$stok',
+            status_produk='$status',
+            gambar='$namaFile'
+            WHERE id_produk='$id'");
+        } else {
+            mysqli_query($conn,"UPDATE tb_produk SET
+            nama_produk='$nama',
+            harga='$harga',
+            stok='$stok',
+            status_produk='$status'
+            WHERE id_produk='$id'");
+        }
     }
 
     echo "<script>window.location='kelola_produk.php';</script>";
@@ -72,7 +90,7 @@ Tambah / Edit Produk
 </h2>
 
 <!-- FORM -->
-<form method="POST"
+<form method="POST" enctype="multipart/form-data"
 class="w-4/5 mx-auto my-5 bg-white p-6 rounded-lg shadow">
 
 <input type="hidden" name="id_produk" id="id_produk">
@@ -97,6 +115,10 @@ class="w-full border p-2 rounded mt-1 mb-3">
 
 <label class="font-semibold">Status Produk:</label>
 <input type="text" name="status_produk" id="status_produk"
+class="w-full border p-2 rounded mt-1 mb-3">
+
+<label class="font-semibold">Foto Produk:</label>
+<input type="file" name="gambar"
 class="w-full border p-2 rounded mt-1 mb-4">
 
 <button type="submit" name="simpan"
@@ -126,6 +148,7 @@ Daftar Produk
 <th class="p-3">Harga</th>
 <th class="p-3">Stok</th>
 <th class="p-3">Status</th>
+<th class="p-3">Foto</th>
 <th class="p-3">Aksi</th>
 </tr>
 
@@ -136,6 +159,11 @@ Daftar Produk
 <td><?php echo $row['harga']; ?></td>
 <td><?php echo $row['stok']; ?></td>
 <td><?php echo $row['status_produk']; ?></td>
+
+<td>
+<img src="gambar_produk/<?php echo $row['gambar']; ?>" width="60">
+</td>
+
 <td class="space-x-2">
 <button onclick="editProduk(
 '<?php echo $row['id_produk']; ?>',

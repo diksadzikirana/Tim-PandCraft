@@ -24,7 +24,7 @@ bg-[linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url('anyam.png')]
 bg-cover bg-center">
 
 <!--  Tombol Logout -->
-<a href="logout.php"
+<a href="logoutpemilik.php"
 class="absolute top-5 right-5 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold">
     Logout
 </a>
