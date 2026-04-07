@@ -69,7 +69,7 @@ VALUES
 ('$id_pesanan', '$id_produk', '$jumlah', '$harga')");
 
 // =====================
-// 6. SIMPAN PEMBAYARAN (INI YANG BARU 🔥)
+// 6. SIMPAN PEMBAYARAN (INI YANG BARU )
 // =====================
 $status_bayar = ($metode == "COD") ? "Belum Dibayar" : "Menunggu Transfer";
 
