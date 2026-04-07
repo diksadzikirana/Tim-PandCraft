@@ -19,14 +19,19 @@ $total = $produk['harga'] * $jumlah;
 
 <body class="bg-gray-100">
 
-<!-- HEADER -->
 <div class="flex justify-between items-center px-10 py-5 bg-white shadow">
+
+    <!-- KIRI -->
     <h1 class="text-2xl font-bold text-green-500">Checkout</h1>
-    <div class="space-x-6 text-gray-500">
-        <span>Cart</span>
-        <span>Review</span>
-        <span class="text-orange-500 font-semibold">Checkout</span>
+
+    <!-- KANAN -->
+    <div>
+        <a href="detail_produk.php?id=<?php echo $id; ?>"
+        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">
+            ← Kembali
+        </a>
     </div>
+
 </div>
 
 <!-- CONTAINER -->

@@ -17,7 +17,7 @@ $data = mysqli_query($conn, "SELECT * FROM tb_produk WHERE status_produk='Tersed
 <!-- HEADER -->
 <div class="flex justify-between items-center px-10 py-5 bg-white shadow">
     <h1 class="text-2xl font-bold green-600">Katalog</h1>
-    <div class="space-x-6 text-grey-600">
+    <div class="space-x-6 text-grey-600">           
     </div>
 
 
