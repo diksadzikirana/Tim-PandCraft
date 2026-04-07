@@ -1,139 +1,172 @@
 <?php
 include "session.php";
+include "koneksi.php";
 
 $user = getValidSession();
 
-//  kalau belum login
 if (!$user) {
     echo "<script>alert('Session habis! Silakan login ulang'); window.location='logpemilik.php';</script>";
     exit();
 }
+
+/* SIMPAN / UPDATE */
+if(isset($_POST['simpan'])){
+    $id = $_POST['id_produk'];
+    $nama = $_POST['nama_produk'];
+    $harga = $_POST['harga'];
+    $stok = $_POST['stok'];
+    $status = $_POST['status_produk'];
+
+    if($id == ""){
+        mysqli_query($conn,"INSERT INTO tb_produk 
+        (nama_produk,harga,stok,status_produk)
+        VALUES('$nama','$harga','$stok','$status')");
+    } else {
+        mysqli_query($conn,"UPDATE tb_produk SET
+        nama_produk='$nama',
+        harga='$harga',
+        stok='$stok',
+        status_produk='$status'
+        WHERE id_produk='$id'");
+    }
+
+    echo "<script>window.location='kelola_produk.php';</script>";
+}
+
+/* HAPUS */
+if(isset($_GET['hapus'])){
+    $id = $_GET['hapus'];
+    mysqli_query($conn,"DELETE FROM tb_produk WHERE id_produk='$id'");
+    echo "<script>window.location='kelola_produk.php';</script>";
+}
+
+/* AMBIL DATA */
+$data = mysqli_query($conn,"SELECT * FROM tb_produk");
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Kelola Produk</title>
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>Kelola Produk</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="font-sans m-0 p-0 
-bg-[linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url('anyam.png')]">
+bg-[linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('anyam.png')] bg-cover">
 
-<!-- Judul -->
-<h3 class="text-center text-white mt-[20px] text-[26px] 
-[text-shadow:2px_2px_6px_rgba(0,0,0,0.6)]">
-    Kelola Data Produk Kerajinan Daun Pandan
+<h3 class="text-center text-white mt-6 text-3xl font-bold">
+Kelola Data Produk Kerajinan Daun Pandan
 </h3>
 
-<!-- Tombol kembali -->
-<div class="w-[80%] mx-auto mt-[20px] flex justify-between">
-
-    <!-- Kembali -->
-    <a href="dashboardpemilik.php"
-    class="bg-white text-[#1b5e20] px-[15px] py-[8px] no-underline rounded-[8px] font-bold 
-    shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-[#dcedc8]">
-        ← Kembali
-    </a>
-
+<div class="w-4/5 mx-auto mt-5">
+<a href="dashboardpemilik.php"
+class="bg-white text-green-800 px-4 py-2 rounded font-bold shadow">
+← Kembali
+</a>
 </div>
 
-<hr class="w-[80%] mx-auto my-[20px]">
+<hr class="w-4/5 mx-auto my-6">
 
-<!-- Sub Judul -->
-<h2 class="text-center text-[#e8f5e9]">
-    Tambah / Edit Produk
+<h2 class="text-center text-green-100 text-xl font-semibold">
+Tambah / Edit Produk
 </h2>
 
-<!-- Form -->
-<form id="formProduk" novalidate
-class="w-[80%] mx-auto my-[20px] bg-[#fdfdfd] p-[25px] rounded-[12px] 
-shadow-[0_10px_25px_rgba(0,0,0,0.25)]">
+<!-- FORM -->
+<form method="POST"
+class="w-4/5 mx-auto my-5 bg-white p-6 rounded-lg shadow">
 
-<input type="hidden" id="id_produk">
+<input type="hidden" name="id_produk" id="id_produk">
 
-<label>Nama Produk:</label><br>
-<select id="nama_produk"
-class="w-full p-[10px] mt-[5px] mb-[15px] rounded-[8px] border border-[#bbb]">
-    <option value="">Pilih Produk</option>
-    <option value="Tas Anyam Pandan">Tas Anyam Pandan</option>
-    <option value="Keranjang Anyam Pandan">Keranjang Anyam Pandan</option>
-    <option value="Dompet Anyam Pandan">Dompet Anyam Pandan</option>
-    <option value="Tikar Anyam Pandan">Tikar Anyam Pandan</option>
+<label class="font-semibold">Nama Produk:</label>
+<select name="nama_produk" id="nama_produk"
+class="w-full border p-2 rounded mt-1 mb-3">
+<option value="">Pilih Produk</option>
+<option value="Tas Anyam Pandan">Tas Anyam Pandan</option>
+<option value="Keranjang Anyam Pandan">Keranjang Anyam Pandan</option>
+<option value="Dompet Anyam Pandan">Dompet Anyam Pandan</option>
+<option value="Tikar Anyam Pandan">Tikar Anyam Pandan</option>
 </select>
 
-<label>Kategori:</label><br>
-<select id="kategori" required
-class="w-full p-[10px] mt-[5px] mb-[15px] rounded-[8px] border border-[#bbb]">
-    <option value="">Pilih Kategori</option>
-    <option value="Tas">Tas</option>
-    <option value="Keranjang">Keranjang</option>
-    <option value="Dompet">Dompet</option>
-    <option value="Tikar">Tikar</option>
-</select>
+<label class="font-semibold">Harga:</label>
+<input type="number" name="harga" id="harga"
+class="w-full border p-2 rounded mt-1 mb-3">
 
-<label>Harga (Rp):</label><br>
-<input type="number" id="harga" min="0" required
-class="w-full p-[10px] mt-[5px] mb-[15px] rounded-[8px] border border-[#bbb]">
+<label class="font-semibold">Stok:</label>
+<input type="number" name="stok" id="stok"
+class="w-full border p-2 rounded mt-1 mb-3">
 
-<label>Stok:</label><br>
-<input type="number" id="stok" min="0" required
-class="w-full p-[10px] mt-[5px] mb-[15px] rounded-[8px] border border-[#bbb]">
+<label class="font-semibold">Status Produk:</label>
+<input type="text" name="status_produk" id="status_produk"
+class="w-full border p-2 rounded mt-1 mb-4">
 
-<label>Status Produk:</label><br>
-<textarea id="status_produk" required
-class="w-full p-[10px] mt-[5px] mb-[15px] rounded-[8px] border border-[#bbb]"></textarea>
-
-<button type="submit"
-class="px-[18px] py-[10px] border-none rounded-[8px] bg-[#2e7d32] text-white font-bold cursor-pointer hover:bg-[#145a1f]">
-    Simpan Produk
+<button type="submit" name="simpan"
+class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded">
+Simpan Produk
 </button>
 
 <button type="reset"
-class="px-[18px] py-[10px] border-none rounded-[8px] bg-[#2e7d32] text-white font-bold cursor-pointer hover:bg-[#145a1f] ml-[10px]">
-    Reset
-</button>
-
-<button type="button"
-class="px-[18px] py-[10px] border-none rounded-[8px] bg-red-600 text-white font-bold cursor-pointer hover:bg-[#145a1f] ml-[10px]">
-    Hapus
+class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded ml-2">
+Reset
 </button>
 
 </form>
 
-<hr class="w-[80%] mx-auto my-[20px]">
+<hr class="w-4/5 mx-auto my-6">
 
-<!-- Daftar Produk -->
-<h2 class="text-center text-[#e8f5e9]">
-    Daftar Produk
+<h2 class="text-center text-green-100 text-xl font-semibold">
+Daftar Produk
 </h2>
 
-<!-- Table -->
-<table id="tabelProduk"
-class="w-[80%] mx-auto my-[20px] border-collapse bg-white rounded-[12px] overflow-hidden 
-shadow-[0_10px_25px_rgba(0,0,0,0.25)]">
+<!-- TABEL -->
+<table class="w-4/5 mx-auto my-5 border-collapse bg-white shadow rounded">
 
-<thead>
-<tr class="bg-[#1b5e20] text-white">
-    <th class="p-[12px]">ID</th>
-    <th class="p-[12px]">Nama</th>
-    <th class="p-[12px]">Kategori</th>
-    <th class="p-[12px]">Harga</th>
-    <th class="p-[12px]">Stok</th>
-    <th class="p-[12px]">Status Produk</th>
+<tr class="bg-green-700 text-white">
+<th class="p-3">ID</th>
+<th class="p-3">Nama</th>
+<th class="p-3">Harga</th>
+<th class="p-3">Stok</th>
+<th class="p-3">Status</th>
+<th class="p-3">Aksi</th>
 </tr>
-</thead>
 
-<tbody>
-    <!-- Data produk -->
-</tbody>
+<?php while($row = mysqli_fetch_array($data)){ ?>
+<tr class="text-center border-b hover:bg-gray-100">
+<td class="p-2"><?php echo $row['id_produk']; ?></td>
+<td><?php echo $row['nama_produk']; ?></td>
+<td><?php echo $row['harga']; ?></td>
+<td><?php echo $row['stok']; ?></td>
+<td><?php echo $row['status_produk']; ?></td>
+<td class="space-x-2">
+<button onclick="editProduk(
+'<?php echo $row['id_produk']; ?>',
+'<?php echo $row['nama_produk']; ?>',
+'<?php echo $row['harga']; ?>',
+'<?php echo $row['stok']; ?>',
+'<?php echo $row['status_produk']; ?>'
+)" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+Edit
+</button>
+
+<a href="kelola_produk.php?hapus=<?php echo $row['id_produk']; ?>"
+onclick="return confirm('Hapus produk?')"
+class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+Hapus
+</a>
+</td>
+</tr>
+<?php } ?>
 
 </table>
 
-<script src="pandcraft.js"></script>
+<script>
+function editProduk(id,nama,harga,stok,status){
+document.getElementById('id_produk').value = id;
+document.getElementById('nama_produk').value = nama;
+document.getElementById('harga').value = harga;
+document.getElementById('stok').value = stok;
+document.getElementById('status_produk').value = status;
+}
+</script>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 include "session.php";
+include "koneksi.php";
 
 $rememberedUser = $_COOKIE['remember_user'] ?? "";
 
@@ -7,16 +8,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST['nama'];
     $password = $_POST['password'];
 
-    if ($nama == "Vera" && $password == "Vera123") {
+    //  divalidasi berdasarkan database di tb_user
+    $query = "SELECT * FROM tb_user 
+              WHERE nama='$nama' 
+              AND password='$password' 
+              AND role='pemilik'";
 
-        createSession(["user" => $nama]);
+    $result = mysqli_query($conn, $query);
 
-        if (isset($_POST['remember'])) {
-            setcookie("remember_user", $nama, time() + 3600, "/");
-        } else {
-            setcookie("remember_user", "", time() - 3600, "/");
-        }
-        echo "<script>alert('Login berhasil!'); window.location='dashboardpemilik.php';</script>";
+    if (mysqli_num_rows($result) > 0) {
+
+        createSession([
+            "user" => $nama,
+            "role" => "pemilik"
+        ]);
+
+        echo "<script>alert('Login Pemilik berhasil!'); window.location='dashboardpemilik.php';</script>";
     } else {
         echo "<script>alert('Login gagal!');</script>";
     }
