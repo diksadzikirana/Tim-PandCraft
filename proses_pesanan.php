@@ -1,8 +1,11 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include "koneksi.php";
 
 // =====================
-// 1. AMBIL DATA DARI FORM
+// 1. AMBIL DATA
 // =====================
 $id_produk = $_POST['id_produk'];
 $jumlah    = $_POST['jumlah'];
@@ -10,15 +13,16 @@ $jumlah    = $_POST['jumlah'];
 $nama      = $_POST['nama'];
 $no_hp     = $_POST['no_hp'];
 $alamat    = $_POST['alamat'];
+$metode    = $_POST['metode'];
 
-// validasi sederhana
+// validasi
 if(empty($id_produk) || empty($jumlah) || empty($nama)){
     echo "<script>alert('Data tidak lengkap!');history.back();</script>";
     exit;
 }
 
 // =====================
-// 2. AMBIL DATA PRODUK
+// 2. AMBIL PRODUK
 // =====================
 $produk = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id_produk='$id_produk'");
 $data_produk = mysqli_fetch_array($produk);
@@ -50,14 +54,14 @@ $id_pembeli = mysqli_insert_id($conn);
 // 4. SIMPAN PESANAN
 // =====================
 mysqli_query($conn, "INSERT INTO tb_pesanan
-(id_pembeli, tgl_pesanan, total_harga, jumlah_pesanan, status_pesanan)
+(id_pembeli, tgl_pesanan, total_harga, jumlah_pesanan, status_pesanan, status)
 VALUES
-('$id_pembeli', NOW(), '$total', '$jumlah', 'Menunggu')");
+('$id_pembeli', NOW(), '$total', '$jumlah', 'Menunggu', '$metode')");
 
 $id_pesanan = mysqli_insert_id($conn);
 
 // =====================
-// 5. SIMPAN DETAIL PESANAN
+// 5. SIMPAN DETAIL
 // =====================
 mysqli_query($conn, "INSERT INTO tb_detail_pesanan
 (id_pesanan, id_produk, jumlah, harga_satuan)
@@ -65,16 +69,29 @@ VALUES
 ('$id_pesanan', '$id_produk', '$jumlah', '$harga')");
 
 // =====================
-// 6. UPDATE STOK
+// 6. SIMPAN PEMBAYARAN (INI YANG BARU 🔥)
+// =====================
+$status_bayar = ($metode == "COD") ? "Belum Dibayar" : "Menunggu Transfer";
+
+mysqli_query($conn, "INSERT INTO tb_pembayaran
+(id_pesanan, metode_bayar, tgl_bayar, status_pembayaran)
+VALUES
+('$id_pesanan', '$metode', NOW(), '$status_bayar')");
+
+// =====================
+// 7. UPDATE STOK
 // =====================
 $stok_baru = $stok - $jumlah;
 
-mysqli_query($conn, "UPDATE tb_produk 
-SET stok='$stok_baru' 
+mysqli_query($conn, "UPDATE tb_produk
+SET stok='$stok_baru'
 WHERE id_produk='$id_produk'");
 
 // =====================
-// 7. SELESAI
+// 8. REDIRECT
 // =====================
-echo "<script>alert('Pesanan berhasil dibuat!'); window.location='katalog.php';</script>";
+echo "<script>
+alert('Pesanan berhasil dibuat!');
+window.location='riwayat.php?id=$id_pesanan';
+</script>";
 ?>
