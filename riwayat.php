@@ -76,17 +76,25 @@ class="w-40 mb-4 rounded">
     <div class="bg-green-100 p-4 rounded">
         <p class="font-semibold text-green-700">Transfer</p>
         <p>Silakan transfer ke:</p>
-        <p class="font-bold">BCA - 1234567890</p>
+        <p class="font-bold">BNI - 1234567890</p>
         <p>a.n PandCraft</p>
     </div>
 <?php } ?>
 
-<!-- BUTTON -->
-<div class="mt-6 text-center">
+<div class="mt-6 flex justify-center gap-4">
+
+    <!-- KEMBALI KE LIHAT PESANAN -->
+    <a href="lihat_pesanan.php"
+    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
+        ← Lihat Pesanan
+    </a>
+
+    <!-- KEMBALI KE KATALOG -->
     <a href="katalog.php"
     class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">
-        ← Kembali ke Katalog
+        Katalog
     </a>
+
 </div>
 
 </div>

@@ -1,89 +1,173 @@
 <?php
 include "koneksi.php";
 
-// Ambil data produk yang tersedia
+// Ambil data produk
 $data = mysqli_query($conn, "SELECT * FROM tb_produk WHERE status_produk='Tersedia'");
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Katalog Produk</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk - PandCraft</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#e8f5e9',
+                            DEFAULT: '#2e7d32',
+                            dark: '#1b4332',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-gradient-to-b from-brand-light via-white to-gray-50 min-h-screen font-sans antialiased flex flex-col text-gray-800">
 
-<!-- HEADER -->
-<div class="flex justify-between items-center px-10 py-5 bg-white shadow">
-    <h1 class="text-2xl font-bold green-600">Katalog</h1>
-    <div class="space-x-6 text-grey-600">           
-    </div>
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-green-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="bg-brand text-white p-2 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark tracking-tight">
+                        PandCraft<span class="text-brand">.</span>
+                    </h1>
+                </div>
 
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <a href="lihat_pesanan.php"
+                        class="flex items-center gap-2 text-sm sm:text-base font-medium text-gray-700 hover:text-brand bg-gray-50 hover:bg-brand-light border border-gray-200 hover:border-green-300 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full transition-all duration-300">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span class="hidden sm:inline">Pesanan Saya</span>
+                    </a>
 
+                    <a href="logoutpembeli.php"
+                        class="flex items-center gap-2 text-sm sm:text-base font-medium text-white bg-red-500 hover:bg-red-600 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full shadow-sm shadow-red-200 transition-all duration-300">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="hidden sm:inline">Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-        <!-- LOGOUT BUTTON -->
-        <a href="logoutpembeli.php" 
-        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4">
-            Logout
-        </a>
-    </div>
-</div>
-</div>
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-8 pb-16">
+        
+        <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200 pb-6 gap-4">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-brand-dark mb-2">Eksplorasi Produk</h2>
+                <p class="text-gray-500 text-sm sm:text-base">Temukan keindahan kerajinan tangan daun pandan berkualitas tinggi.</p>
+            </div>
+            
+            <div class="relative w-full md:w-64">
+                <input type="text" placeholder="Cari kerajinan..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent bg-white shadow-sm">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
 
-<!-- TITLE -->
-<h2 class="text-5xl font-bold px-10 mt-10">Produk</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
 
-<!-- GRID PRODUK -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 py-10">
+            <?php while($row = mysqli_fetch_array($data)){ ?>
 
-<?php while($row = mysqli_fetch_array($data)){ ?>
+            <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_20px_-6px_rgba(46,125,50,0.2)] border border-gray-100 hover:border-green-200 transition-all duration-300 overflow-hidden flex flex-col group">
+                
+                <div class="relative w-full aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-3">
+                    <?php if($row['stok'] <= 0){ ?>
+                        <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                            <span class="bg-gray-800 text-white font-semibold px-4 py-1.5 rounded-full text-sm shadow-md tracking-wider">
+                                HABIS
+                            </span>
+                        </div>
+                    <?php } ?>
+                    
+                    <img src="gambar_produk/<?php echo $row['gambar']; ?>" 
+                         class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 ease-out" 
+                         alt="<?php echo $row['nama_produk']; ?>">
+                </div>
 
-<div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+                <div class="p-4 flex flex-col flex-grow bg-white">
+                    
+                    <h3 class="text-gray-800 font-medium text-sm sm:text-base line-clamp-2 h-10 sm:h-12 leading-snug group-hover:text-brand transition-colors">
+                        <?php echo $row['nama_produk']; ?>
+                    </h3>
 
-    <!-- GAMBAR -->
-    <div class="h-48 flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
-        <img src="gambar_produk/<?php echo $row['gambar']; ?>" 
-        class="h-full object-contain">
-    </div>
+                    <div class="mt-auto pt-3 flex flex-col gap-1">
+                        <div class="text-brand font-bold text-lg sm:text-xl">
+                            Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-1">
+                            <div class="text-xs text-gray-500 flex items-center gap-1.5">
+                                <i class="fa-solid fa-cubes text-gray-400"></i> Sisa: <?php echo $row['stok']; ?>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider bg-brand-light text-brand-dark px-2 py-0.5 rounded-md font-semibold">
+                                Ori
+                            </span>
+                        </div>
+                    </div>
 
-    <!-- NAMA PRODUK -->
-    <h3 class="mt-4 text-lg font-semibold">
-        <?php echo $row['nama_produk']; ?>
-    </h3>
+                    <div class="mt-4">
+                        <?php if($row['stok'] > 0){ ?>
+                            <a href="detail_produk.php?id=<?php echo $row['id_produk']; ?>"
+                            class="block w-full text-center bg-brand hover:bg-brand-dark text-white font-medium py-2 sm:py-2.5 rounded-lg text-sm sm:text-base transition-colors shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Beli
+                            </a>
+                        <?php } else { ?>
+                            <button class="block w-full text-center bg-gray-100 text-gray-400 font-medium py-2 sm:py-2.5 rounded-lg text-sm sm:text-base cursor-not-allowed border border-gray-200" disabled>
+                                Stok Kosong
+                            </button>
+                        <?php } ?>
+                    </div>
+                    
+                </div>
+            </div>
 
-    <!-- DESKRIPSI -->
-    <p class="text-sm text-gray-500">
-        Produk kerajinan daun pandan
-    </p>
+            <?php } ?>
 
-    <!-- HARGA -->
-    <p class="mt-2 font-bold text-green-700">
-        Rp <?php echo number_format($row['harga']); ?>
-    </p>
+            <?php if(mysqli_num_rows($data) == 0): ?>
+                <div class="col-span-full py-20 text-center flex flex-col items-center justify-center">
+                    <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400 text-4xl">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700">Belum ada produk</h3>
+                    <p class="text-gray-500 mt-2">Saat ini tidak ada produk yang berstatus tersedia di etalase.</p>
+                </div>
+            <?php endif; ?>
 
-    <!-- STOK -->
-    <p class="text-sm text-gray-500">
-        Stok: <?php echo $row['stok']; ?>
-    </p>
+        </div>
+    </main>
 
-    <!-- BUTTON -->
-    <?php if($row['stok'] > 0){ ?>
-        <a href="detail_produk.php?id=<?php echo $row['id_produk']; ?>"
-class="block text-center mt-3 w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-full">
-    Beli
-</a>
-    <?php } else { ?>
-        <button class="mt-3 w-full bg-gray-400 text-white py-2 rounded-full" disabled>
-            Stok Habis
-        </button>
-    <?php } ?>
-
-</div>
-
-<?php } ?>
-
-</div>
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-gray-500 font-medium">
+                &copy; <?= date("Y") ?> PandCraft. Hak Cipta Dilindungi.
+            </p>
+            <div class="flex gap-4 text-gray-400">
+                <i class="fa-brands fa-instagram hover:text-brand cursor-pointer transition-colors text-xl"></i>
+                <i class="fa-brands fa-whatsapp hover:text-brand cursor-pointer transition-colors text-xl"></i>
+                <i class="fa-brands fa-facebook hover:text-brand cursor-pointer transition-colors text-xl"></i>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

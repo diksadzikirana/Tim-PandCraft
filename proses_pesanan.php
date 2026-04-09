@@ -54,9 +54,9 @@ $id_pembeli = mysqli_insert_id($conn);
 // 4. SIMPAN PESANAN
 // =====================
 mysqli_query($conn, "INSERT INTO tb_pesanan
-(id_pembeli, tgl_pesanan, total_harga, jumlah_pesanan, status_pesanan, status)
+(id_pembeli, tgl_pesanan, total_harga, jumlah_pesanan, status_pesanan)
 VALUES
-('$id_pembeli', NOW(), '$total', '$jumlah', 'Menunggu', '$metode')");
+('$id_pembeli', NOW(), '$total', '$jumlah', 'Menunggu')");
 
 $id_pesanan = mysqli_insert_id($conn);
 
@@ -69,14 +69,20 @@ VALUES
 ('$id_pesanan', '$id_produk', '$jumlah', '$harga')");
 
 // =====================
-// 6. SIMPAN PEMBAYARAN (INI YANG BARU )
+// 6. SIMPAN PEMBAYARAN
 // =====================
-$status_bayar = ($metode == "COD") ? "Belum Dibayar" : "Menunggu Transfer";
+
+// LOGIC STATUS PEMBAYARAN
+if($metode == "COD"){
+    $status_bayar = "Belum Bayar";
+} else {
+    $status_bayar = "Menunggu Pembayaran";
+}
 
 mysqli_query($conn, "INSERT INTO tb_pembayaran
-(id_pesanan, metode_bayar, tgl_bayar, status_pembayaran)
+(id_pesanan, metode_bayar, status_pembayaran)
 VALUES
-('$id_pesanan', '$metode', NOW(), '$status_bayar')");
+('$id_pesanan', '$metode', '$status_bayar')");
 
 // =====================
 // 7. UPDATE STOK

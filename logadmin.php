@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query = "SELECT * FROM tb_user 
               WHERE nama='$nama' 
               AND password='$password' 
-              AND role='pemilik'";
+              AND role='admin'";
 
     $result = mysqli_query($conn, $query);
 
@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         createSession([
             "user" => $nama,
-            "role" => "pemilik"
+            "role" => "admin"
         ]);
 
-        echo "<script>alert('Login Pemilik berhasil!'); window.location='dashboardpemilik.php';</script>";
+        echo "<script>alert('Login admin berhasil!'); window.location='admin_pesanan.php';</script>";
     } else {
         echo "<script>alert('Login gagal!');</script>";
     }
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Pemilik - PandCraft</title>
+    <title>Login Admin - PandCraft</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="text-4xl font-serif font-bold text-brand-dark mb-2">
                 PandCraft<span class="text-brand">.</span>
             </div>
-            <h2 class="text-gray-500 font-medium">Portal Akses <span class="text-brand font-semibold">Pemilik</span></h2>
+            <h2 class="text-gray-500 font-medium">Portal Akses <span class="text-brand font-semibold">Admin</span></h2>
         </div>
 
         <form method="POST" class="relative z-10 space-y-5">
@@ -109,12 +109,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <button type="submit" class="w-full py-3.5 mt-4 bg-brand text-white font-medium rounded-xl hover:bg-brand-dark transition shadow-lg shadow-green-200">
-                Masuk ke Dashboard
+                Masuk
             </button>
 
         </form>
 
-        <div class="mt-8 text-center relative z-10">
+        <div class="mt-8 text-center relative z-10 flex flex-col gap-3">
             <a href="beranda.php" class="text-sm font-medium text-gray-500 hover:text-brand transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
             </a>

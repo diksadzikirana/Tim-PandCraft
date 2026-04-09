@@ -19,7 +19,7 @@ $produk = mysqli_fetch_array($data);
 <div class="flex justify-between items-center px-10 py-5 bg-white shadow">
     <h1 class="text-2xl font-bold text-green-700">Katalog</h1>
     <div class="space-x-6 text-gray-600">
-        <a href="katalog.php">Home</a>
+        <a href="katalog.php">Kembali</a>
     </div>
 </div>
 
