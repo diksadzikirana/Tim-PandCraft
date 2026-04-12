@@ -3,7 +3,7 @@ session_start();
 
 function createSession($data) {
     $_SESSION['user'] = $data['user'];
-    $_SESSION['exp'] = time() + 60; // 60 detik
+    $_SESSION['exp'] = time() + 10; // 30 menit
 }
 
 function getValidSession() {

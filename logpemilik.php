@@ -1,28 +1,76 @@
 <?php
+// Pastikan session sudah berjalan di file session.php atau jalankan session_start() di sini
 include "session.php";
 include "koneksi.php";
 
+// ==========================================
+// 1. CEK AUTO-LOGIN DARI COOKIE (TOKEN VALIDASI)
+// ==========================================
+if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
+    $token = $_COOKIE['remember_token'];
+    
+    // Cari token di database
+    $stmt_token = $conn->prepare("SELECT nama, role FROM tb_user WHERE remember_token = ? AND role = 'pemilik'");
+    $stmt_token->bind_param("s", $token);
+    $stmt_token->execute();
+    $result_token = $stmt_token->get_result();
+
+    if ($row = $result_token->fetch_assoc()) {
+        // Token valid! Auto-login dengan membuat session
+        createSession([
+            "user" => $row['nama'],
+            "role" => "pemilik"
+        ]);
+        
+        // Langsung arahkan ke dashboard tanpa perlu isi form lagi
+        header("Location: dashboardpemilik.php");
+        exit();
+    }
+}
+
+// Untuk fitur pre-fill username (jika tidak auto-login)
 $rememberedUser = $_COOKIE['remember_user'] ?? "";
 
+// ==========================================
+// 2. PROSES LOGIN MANUAL (POST DARI FORM)
+// ==========================================
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST['nama'];
     $password = $_POST['password'];
 
-    //  divalidasi berdasarkan database di tb_user
-    $query = "SELECT * FROM tb_user 
-              WHERE nama='$nama' 
-              AND password='$password' 
-              AND role='pemilik'";
+    // KEAMANAN: Gunakan Prepared Statement untuk mencegah SQL Injection!
+    $stmt = $conn->prepare("SELECT nama FROM tb_user WHERE nama = ? AND password = ? AND role = 'pemilik'");
+    $stmt->bind_param("ss", $nama, $password); // 'ss' berarti string, string
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $result = mysqli_query($conn, $query);
+    if ($result->num_rows > 0) {
+        $user_data = $result->fetch_assoc();
 
-    if (mysqli_num_rows($result) > 0) {
+        // 3. LOGIKA "REMEMBER ME" SAAT LOGIN BERHASIL
         if (isset($_POST['remember'])) {
-    setcookie("remember_user", $nama, time() + (86400 * 30), "/");
-    } else {
-    setcookie("remember_user", "", time() - 3600, "/");
-    }
+            // Buat token acak yang aman sepanjang 64 karakter
+            $token = bin2hex(random_bytes(32));
+            
+            // Simpan token tersebut ke database pengguna ini
+            $update_token = $conn->prepare("UPDATE tb_user SET remember_token = ? WHERE nama = ?");
+            $update_token->bind_param("ss", $token, $nama);
+            $update_token->execute();
 
+            // Simpan token dan nama di Cookie browser selama 30 hari
+            setcookie("remember_token", $token, time() + (86400 * 30), "/");
+            setcookie("remember_user", $nama, time() + (86400 * 30), "/");
+        } else {
+            // Jika tidak dicentang, hapus token di DB dan hapus cookie di browser
+            $hapus_token = $conn->prepare("UPDATE tb_user SET remember_token = NULL WHERE nama = ?");
+            $hapus_token->bind_param("s", $nama);
+            $hapus_token->execute();
+
+            setcookie("remember_token", "", time() - 3600, "/");
+            setcookie("remember_user", "", time() - 3600, "/");
+        }
+
+        // Buat Session standar
         createSession([
             "user" => $nama,
             "role" => "pemilik"
@@ -30,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo "<script>alert('Login Pemilik berhasil!'); window.location='dashboardpemilik.php';</script>";
     } else {
-        echo "<script>alert('Login gagal!');</script>";
+        echo "<script>alert('Login gagal! Nama atau Kata Sandi salah.');</script>";
     }
 }
 ?>
@@ -57,9 +105,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     },
                     colors: {
                         brand: {
-                            light: '#f0fdf4', // Light green background fallback
-                            DEFAULT: '#2e7d32', // Original green
-                            dark: '#1b4332', // Deep forest green
+                            light: '#f0fdf4',
+                            DEFAULT: '#2e7d32',
+                            dark: '#1b4332',
                         }
                     }
                 }

@@ -13,7 +13,7 @@ function createSession(data) {
 
     const payload = {
         data: data,
-        exp: Math.floor(Date.now() / 1000) + 1800 // 30 menit
+        exp: Math.floor(Date.now() / 1800) + 1800 // 30 menit
     };
 
     const secret = "secret123"; // simulasi secret

@@ -3,10 +3,24 @@ include "session.php";
 
 $user = getValidSession();
 
-// kalau belum login / session habis
+// Jika session tidak aktif
 if (!$user) {
-    echo "<script>alert('Session habis! Silakan login ulang'); window.location='logpemilik.php';</script>";
-    exit();
+    // 1. Cek apakah ada Cookie "Remember Me"
+    if (isset($_COOKIE['remember_token'])) {
+        // Jika ada cookie, langsung lempar ke login page diam-diam (tanpa alert)
+        // Halaman logpemilik.php yang sudah kita buat sebelumnya akan 
+        // menangani validasi token tersebut secara otomatis.
+        header("Location: logpemilik.php");
+        exit();
+    } else {
+        // 2. Jika TIDAK ADA cookie, berarti user memang tidak mencentang "Ingat Saya"
+        // Munculkan alert dan kembalikan ke login
+        echo "<script>
+            alert('Sesi Anda telah berakhir. Silakan login kembali.'); 
+            window.location='logpemilik.php';
+        </script>";
+        exit();
+    }
 }
 ?>
 

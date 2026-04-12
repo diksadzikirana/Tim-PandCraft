@@ -19,7 +19,7 @@ function getValidSession() {
 
     if (!payload) return null;
 
-    const now = Math.floor(Date.now() / 1000);
+    const now = Math.floor(Date.now() / 1800);
 
     // cek expired
     if (now > payload.exp) {
