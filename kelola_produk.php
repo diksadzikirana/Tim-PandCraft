@@ -4,9 +4,21 @@ include "koneksi.php";
 
 $user = getValidSession();
 
+// Jika session tidak aktif
 if (!$user) {
-    echo "<script>alert('Session habis! Silakan login ulang'); window.location='logpemilik.php';</script>";
-    exit();
+    // Cek apakah ada Cookie "Remember Me"
+    if (isset($_COOKIE['remember_token'])) {
+        // Jika ada cookie, langsung lempar ke login page diam-diam (tanpa alert)
+        header("Location: logpemilik.php");
+        exit();
+    } else {
+        // Jika TIDAK ADA cookie, munculkan alert dan kembalikan ke login
+        echo "<script>
+            alert('Sesi Anda telah berakhir. Silakan login kembali.'); 
+            window.location='logpemilik.php';
+        </script>";
+        exit();
+    }
 }
 
 /* SIMPAN / UPDATE */
