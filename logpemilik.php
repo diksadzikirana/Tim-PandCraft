@@ -17,6 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) > 0) {
+        if (isset($_POST['remember'])) {
+    setcookie("remember_user", $nama, time() + (86400 * 30), "/");
+    } else {
+    setcookie("remember_user", "", time() - 3600, "/");
+    }
 
         createSession([
             "user" => $nama,
